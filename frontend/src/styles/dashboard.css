@@ -1,0 +1,179 @@
+/* ===== Dashboard (4 módulos, look pro) ===== */
+:root{
+  --ink: rgba(43,30,23,.92);
+  --ink-soft: rgba(43,30,23,.72);
+  --line-soft: rgba(106,78,61,.16);
+  --card-bg: #fff;
+}
+
+/* Fondo suave con “luces” */
+.dashboard{
+  background:
+    radial-gradient(1200px 700px at 70% -10%, rgba(255,255,255,.65), transparent 60%),
+    radial-gradient(900px 400px at 0% 30%, rgba(233,220,203,.30), transparent 60%),
+    var(--cream);
+  padding: 28px 0 64px;
+}
+
+/* Encabezado */
+.dash-header{ margin: 8px 0 22px; }
+.dash-eyebrow{
+  text-transform: uppercase; letter-spacing: 1.8px; font-weight:700;
+  color: var(--ink-soft); margin: 0 0 6px;
+}
+.dash-title{
+  font-family: "Playfair Display", serif;
+  font-size: clamp(32px, 4.6vw, 48px);
+  color: var(--ink); margin: 0 6px 6px 0;
+}
+.dash-sub{ margin:0; color: var(--ink-soft); }
+
+/* Grid: solo 4 tarjetas, grandes */
+.dash-grid{
+  display:grid;
+  grid-template-columns: repeat(2, minmax(280px, 1fr));
+  gap: 20px;
+}
+@media (max-width: 800px){
+  .dash-grid{ grid-template-columns: 1fr; }
+}
+
+/* Tarjeta */
+.dash-card{
+  position:relative;
+  display:grid; grid-template-columns: 72px 1fr 20px; align-items:center;
+  gap: 16px;
+  padding: 24px 20px;
+  background: var(--card-bg);
+  border: 1px solid var(--line-soft);
+  border-radius: 18px;
+  text-decoration:none; color: var(--ink);
+  box-shadow: 0 10px 22px rgba(0,0,0,.06);
+  transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease;
+  overflow: hidden;
+}
+.dash-card::before{
+  content:""; position:absolute; inset: -1px; border-radius: 18px;
+  background: radial-gradient(120% 100% at 0% 0%, rgba(46,125,50,.12), rgba(233,220,203,.18));
+  opacity: 0; transition: opacity .2s ease;
+}
+.dash-card:hover{
+  transform: translateY(-3px);
+  border-color: rgba(46,125,50,.25);
+  box-shadow: 0 16px 30px rgba(0,0,0,.12);
+}
+.dash-card:hover::before{ opacity: .65; }
+
+.dash-icon{
+  width:72px; height:72px; display:grid; place-items:center;
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(46,125,50,.18), rgba(46,125,50,.08));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.7);
+  color: var(--green-700);
+}
+.dash-icon svg{ width:28px; height:28px; }
+
+.dash-card-body h3{
+  margin: 0 0 6px;
+  font-size: 1.18rem; color: var(--ink);
+}
+.dash-card-body p{
+  margin: 0; font-size: .96rem; color: var(--ink-soft);
+}
+
+.dash-card-cta{
+  font-weight: 800; opacity: .55; transform: translateX(0);
+  transition: transform .16s ease, opacity .16s ease;
+}
+.dash-card:hover .dash-card-cta{ opacity:1; transform: translateX(2px); }
+
+.dash-card:focus-visible{
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(46,125,50,.20), 0 10px 24px rgba(0,0,0,.12);
+}
+
+/* ===== MODO TARJETAS GRANDES (ocupan casi toda la página) ===== */
+
+/* Un poco más de ancho útil para que respiren */
+.dashboard .container{
+  width: min(1200px, 94%);
+}
+
+/* Que el panel cubra el alto visible (restando la barra) */
+.dashboard{
+  min-height: calc(100vh - 68px);
+  padding-top: 28px;
+  padding-bottom: 40px;
+}
+
+/* Grid 2×2 grande */
+.dash-grid{
+  grid-template-columns: repeat(2, 1fr);
+  gap: 28px;
+  /* asegura que el grid “llene” gran parte del viewport */
+  min-height: calc(100vh - 200px); /* ajusta si tu header ocupa más/menos */
+  align-items: stretch;
+}
+
+/* Tarjeta grande */
+.dash-card{
+  grid-template-columns: 96px 1fr 28px;
+  padding: 32px 28px;
+  border-radius: 22px;
+  min-height: clamp(200px, 34vh, 300px); /* cada tarjeta ocupa ~1/3–1/2 de alto */
+  box-shadow: 0 14px 30px rgba(0,0,0,.10);
+  font-size: 1.02rem;
+}
+
+/* Icono grande */
+.dash-icon{
+  width: 96px;
+  height: 96px;
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(46,125,50,.22), rgba(46,125,50,.10));
+}
+.dash-icon svg{
+  width: 38px;
+  height: 38px;
+}
+
+/* Tipografía más potente dentro de la tarjeta */
+.dash-card-body h3{
+  font-size: clamp(1.25rem, 1.6vw, 1.6rem);
+  margin-bottom: 8px;
+}
+.dash-card-body p{
+  font-size: clamp(.98rem, 1.1vw, 1.05rem);
+}
+
+/* Flecha un poco más notoria */
+.dash-card-cta{
+  font-size: 1.4rem;
+  opacity: .65;
+}
+.dash-card:hover .dash-card-cta{
+  transform: translateX(4px);
+  opacity: 1;
+}
+
+/* Hover sutil pero premium */
+.dash-card:hover{
+  transform: translateY(-4px);
+  border-color: rgba(46,125,50,.28);
+  box-shadow: 0 18px 36px rgba(0,0,0,.14);
+}
+.dash-card::before{
+  border-radius: 22px;
+}
+
+/* Responsivo: en móvil 1 columna y altura razonable */
+@media (max-width: 900px){
+  .dash-grid{ grid-template-columns: 1fr; min-height: auto; }
+  .dash-card{
+    grid-template-columns: 80px 1fr 24px;
+    min-height: 220px;
+    padding: 26px 22px;
+  }
+  .dash-icon{ width:80px; height:80px; }
+  .dash-icon svg{ width:32px; height:32px; }
+}

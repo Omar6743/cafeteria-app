@@ -1,0 +1,394 @@
+/* ========== Login – versión limpia ========== */
+:root{
+  /* Colores base (usa los tuyos si ya están en index.css) */
+  --cream: #F5F2E6;
+  --coffee-900: #2B1E17;
+  --green-600: #2E7D32;
+  --green-700: #1F5E25;
+
+  /* Taza */
+  --cup-base:  #FFF8EE;
+  --cup-border:#EADFD3;
+
+  /* Café */
+  --coffee-1:#836151; --coffee-2:#64483B; --coffee-3:#493329;
+
+  /* Ancho del formulario dentro de la taza */
+  --form-w: 360px;
+}
+
+/* ===== Layout ===== */
+.auth-layout{
+  min-height: calc(100vh - 68px);
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+}
+@media (max-width: 980px){ .auth-layout{ grid-template-columns: 1fr; } }
+
+.auth-hero{
+  background:
+    linear-gradient(to bottom, rgba(46,29,23,.55), rgba(46,29,23,.25)),
+    url("https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?auto=format&fit=crop&w=1400&q=80")
+    center/cover no-repeat;
+  color: #fff;
+  display: grid; place-items: center; padding: 32px;
+}
+.auth-hero-inner{ width:min(560px,90%); text-align:left; }
+.auth-hero h2{ font-family:"Playfair Display",serif; font-size:clamp(28px,4vw,44px); margin:0 0 10px; }
+.auth-hero p{ margin:0; opacity:.95; }
+
+.auth-card{
+  background: linear-gradient(180deg,#EDE6D8 0%,#E6DECF 100%);
+  display:grid; align-content:center;
+  padding: clamp(24px,5vw,56px);
+}
+
+/* ===== Formulario base ===== */
+.auth-title{ margin:0 0 2px; font-size:28px; color:#3e2b22; }
+.auth-sub{ margin:0 0 18px; opacity:.78; }
+
+.form-row{ margin-bottom:14px; }
+.form-row-inline{ display:flex; align-items:center; justify-content:space-between; gap:12px; margin:8px 0 14px; }
+
+label{ display:block; font-weight:600; margin-bottom:6px; color:#3e2b22; }
+.input{
+  width:100%; height:42px; padding: 10px 14px;
+  border:1px solid rgba(106,78,61,.18); border-radius:10px;
+  background: rgba(255,255,255,.22);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.6);
+  color: var(--coffee-900); outline:none;
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+.input::placeholder{ color: rgba(43,30,23,.55); }
+.input:focus{
+  border-color: var(--green-600);
+  box-shadow: 0 0 0 3px rgba(46,125,50,.12), inset 0 1px 0 rgba(255,255,255,.7);
+}
+.input-error{ border-color:#E3A29D; background:#FFF7F6; }
+.error-text{ color:#B25E59; margin-top:6px; display:block; font-size:.92rem; }
+
+.input-password{ position:relative; }
+.show-btn{
+  position:absolute; right:8px; top:50%; transform:translateY(-50%);
+  background:transparent; border:none; cursor:pointer;
+  color: rgba(43,30,23,.68); font-weight:600; text-decoration:underline;
+}
+.show-btn:hover{ color: rgba(43,30,23,.9); }
+
+.checkbox{ display:flex; align-items:center; gap:8px; }
+.link{ color: rgba(43,30,23,.86); text-decoration:none; font-weight:600; }
+.link:hover{ text-decoration:underline; }
+
+.btn.btn-primary{
+  height:42px; border-radius:10px; width:100%;
+  background: transparent;
+  color: var(--green-700);
+  border: 1.5px solid rgba(47,107,52,.45);
+}
+.btn.btn-primary:hover{ background: rgba(47,107,52,.08); }
+.helper{ margin-top:12px; font-size:.86rem; opacity:.68; text-align:center; }
+
+/* ===== Taza ===== */
+.cup-login{
+  position:relative;
+  width:min(520px,94%);
+  margin:0 auto;
+}
+
+/* Cuerpo de la taza: redondo y CONTIENE el contenido */
+.cup-body{
+  position:relative; z-index:2;
+  padding: 96px 26px 46px;               /* espacio superior/inf. */
+  background: var(--cup-base);
+  border-radius: 36px 36px 60% 60% / 36px 36px 70% 70%;
+  box-shadow:
+    0 14px 30px rgba(0,0,0,.13),
+    inset 0 0 0 1px var(--cup-border);
+  overflow:hidden;                       /* <-- nada se sale de la taza */
+}
+
+/* Café (elipse arriba, recortada por overflow) */
+.cup-coffee{
+  position:absolute; left:50%; top:0; transform: translate(-50%, -55%);
+  width:90%; height:120px; border-radius:999px;
+  background: radial-gradient(120% 140% at 50% 25%, var(--coffee-1), var(--coffee-2) 62%, var(--coffee-3) 100%);
+  box-shadow: inset 0 -10px 14px rgba(0,0,0,.22);
+  pointer-events:none; z-index:1;       /* bajo el contenido */
+}
+
+/* Contenido del form, con ancho fijo agradable */
+.cup-inner{ position:relative; z-index:2; }
+.cup-inner > *{ max-width: var(--form-w); margin-inline:auto; width:100%; }
+
+/* Asa: detrás de la taza */
+.cup-handle{
+  position:absolute; right:-60px; top:50%; transform:translateY(-50%);
+  width:130px; height:130px; border-radius:50%;
+  box-shadow:
+    inset 0 0 0 16px var(--cup-base),
+    inset 0 0 0 22px var(--cup-border);
+  background: transparent;
+  z-index:1; pointer-events:none;
+}
+
+/* Humo sobre la taza (no se recorta) */
+.cup-steam{
+  position:absolute; left:50%; top:-28px; transform:translateX(-50%);
+  width:200px; height:130px; z-index:3; pointer-events:none;
+  opacity:.95;
+}
+.cup-steam span{
+  position:absolute; bottom:0; left:50%;
+  width:18px; height:70px; margin-left:-9px; border-radius:999px;
+  background: linear-gradient(to top, rgba(245,242,230,0), rgba(255,255,255,.88));
+  filter: blur(.6px);
+  animation: steamRise 2.9s ease-in-out infinite;
+}
+.cup-steam span:nth-child(2){ left:35%; animation-delay:.5s; height:78px; }
+.cup-steam span:nth-child(3){ left:65%; animation-delay:1s;  height:66px; }
+
+@keyframes steamRise{
+  0%   { transform: translateY(16px) scale(.92); opacity:0; }
+  25%  { opacity:.95; }
+  100% { transform: translateY(-80px) scale(1.06); opacity:0; }
+}
+
+/* Responsivo: simplificar */
+@media (max-width: 720px){
+  .cup-body{ padding:28px; border-radius:24px; }
+  .cup-coffee, .cup-handle, .cup-steam{ display:none; }
+}
+
+/* ============ PRO LOOK: taza + form con labels flotantes ============ */
+:root{
+  --cup-base:  #FFF8EE;
+  --cup-border:#EADFD3;
+  --coffee-1:#7A5A4B; --coffee-2:#5F463B; --coffee-3:#3F2C24;
+  --ink: rgba(43,30,23,.90);
+  --ink-soft: rgba(43,30,23,.68);
+  --accent: #2E7D32;
+  --form-w: 360px;
+}
+
+/* columna derecha con foco sutil */
+.auth-card{
+  background:
+    radial-gradient(800px 400px at 60% 20%, rgba(255,255,255,.5), transparent 60%),
+    linear-gradient(180deg,#EDE6D8 0%,#E6DECF 100%);
+}
+
+/* ---------- Taza redondeada y profesional ---------- */
+.cup-login{ position: relative; width:min(560px,94%); margin: 0 auto; }
+.cup-login::after{ /* sombra elíptica bajo la taza */
+  content:""; position:absolute; left:50%; bottom:-28px; transform:translateX(-50%);
+  width:78%; height:28px; border-radius:999px;
+  background: radial-gradient(60% 100% at 50% 50%, rgba(0,0,0,.18), rgba(0,0,0,0));
+  filter: blur(2px); z-index:0; pointer-events:none;
+}
+
+.cup-body{
+  position:relative; z-index:2;
+  padding: 88px 28px 44px;
+  background: var(--cup-base);
+  border-radius: 36px 36px 58% 58% / 34px 34px 70% 70%;
+  box-shadow:
+    0 18px 36px rgba(0,0,0,.10),
+    inset 0 0 0 1px var(--cup-border);
+  overflow:hidden; /* todo queda dentro */
+}
+
+/* borde superior + brillo */
+.cup-rim{
+  position:absolute; left:50%; top:-12px; transform:translateX(-50%);
+  width:86%; height:18px; border-radius:999px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.95), rgba(255,255,255,.35)),
+    radial-gradient(60% 120% at 50% 30%, rgba(0,0,0,.12), transparent 70%);
+  pointer-events:none; z-index:3;
+}
+
+/* superficie del café (debajo de contenidos) */
+.cup-coffee{
+  position:absolute; left:50%; top:0; transform:translate(-50%,-56%);
+  width:90%; height:110px; border-radius:999px;
+  background: radial-gradient(120% 140% at 50% 25%, var(--coffee-1), var(--coffee-2) 62%, var(--coffee-3) 100%);
+  box-shadow: inset 0 -10px 16px rgba(0,0,0,.22);
+  z-index:1; pointer-events:none;
+}
+
+/* brillo vertical sutil (más “porcelana”) */
+.cup-gloss{
+  position:absolute; inset:0; z-index:2; pointer-events:none;
+  background: linear-gradient(120deg, rgba(255,255,255,.06), transparent 22%, transparent 78%, rgba(255,255,255,.06));
+}
+
+/* asa detrás */
+.cup-handle{
+  position:absolute; right:-62px; top:50%; transform:translateY(-50%);
+  width:132px; height:132px; border-radius:50%;
+  box-shadow:
+    inset 0 0 0 16px var(--cup-base),
+    inset 0 0 0 22px var(--cup-border);
+  background: transparent; z-index:1; pointer-events:none;
+}
+
+/* humo más suave, 5 penachos */
+.cup-steam{
+  position:absolute; left:50%; top:-26px; transform:translateX(-50%);
+  width:220px; height:150px; z-index:4; pointer-events:none; opacity:.95;
+}
+.cup-steam span{
+  position:absolute; bottom:0; left:50%;
+  width:16px; height:72px; margin-left:-8px; border-radius:999px;
+  background: linear-gradient(to top, rgba(245,242,230,0), rgba(255,255,255,.9));
+  filter: blur(.7px); animation: steamUp 3s ease-in-out infinite;
+}
+.cup-steam span:nth-child(1){ left:32%; animation-delay:.1s; height:80px; }
+.cup-steam span:nth-child(2){ left:45%; animation-delay:.4s; height:68px; }
+.cup-steam span:nth-child(3){ left:55%; animation-delay:.8s; height:76px; }
+.cup-steam span:nth-child(4){ left:68%; animation-delay:1.2s; height:70px; }
+.cup-steam span:nth-child(5){ left:50%; animation-delay:1.6s; height:86px; }
+@keyframes steamUp{
+  0%{ transform:translateY(14px) scale(.92); opacity:0 }
+  20%{ opacity:.95 }
+  100%{ transform:translateY(-84px) scale(1.06); opacity:0 }
+}
+
+/* ---------- Form — labels flotantes + glass ---------- */
+.cup-inner{ position:relative; z-index:3; }
+.cup-inner > *{ max-width: var(--form-w); margin-inline:auto; width:100%; }
+
+.auth-title{ margin:0 0 6px; font-size:28px; color:var(--ink); }
+.auth-sub{ margin:0 0 18px; color:var(--ink-soft); }
+
+.form{ display:block; }
+
+.field{ position:relative; margin-bottom:16px; }
+.control{
+  width:100%; height:44px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border:1px solid rgba(106,78,61,.18);
+  background: rgba(255,255,255,.22);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.6);
+  color:var(--ink);
+  transition: border-color .15s ease, box-shadow .15s ease, background .15s ease;
+}
+.control::placeholder{ color:transparent; }     /* para label flotante */
+.control:focus{
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(46,125,50,.12), inset 0 1px 0 rgba(255,255,255,.7);
+}
+.control.is-error{ border-color:#E3A29D; background:#FFF7F6; }
+
+.field > label{
+  position:absolute; left:14px; top:50%;
+  transform: translateY(-50%);
+  color: var(--ink-soft);
+  pointer-events:none;
+  transition: all .18s ease;
+  background: transparent;
+  padding: 0 4px;
+}
+.control:focus + label,
+.control:not(:placeholder-shown) + label{
+  top: -8px; transform:none;
+  font-size:.82rem; color: var(--ink);
+  background: var(--cup-base);
+  border-radius: 6px;
+}
+
+.msg{ display:block; margin-top:6px; font-size:.9rem; color:#B25E59; }
+
+.reveal{
+  position:absolute; right:10px; top:50%; transform:translateY(-50%);
+  background:transparent; border:none; color:var(--ink-soft);
+  font-weight:600; cursor:pointer; padding:0 4px;
+}
+.reveal:hover{ color:var(--ink); }
+
+.meta{
+  display:flex; align-items:center; justify-content:space-between;
+  gap:12px; margin: 10px 0 16px;
+}
+.check{ display:flex; align-items:center; gap:8px; color:var(--ink); }
+.muted{ color:var(--ink); text-decoration:none; }
+.muted:hover{ text-decoration:underline; }
+
+/* CTA elegante */
+.cta{
+  display:block; width:100%; height:44px; border-radius:12px;
+  background: linear-gradient(180deg, #2E7D32, #1F5E25);
+  color:#fff; font-weight:700; letter-spacing:.2px; border:none;
+  box-shadow: 0 4px 12px rgba(0,0,0,.12);
+  transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
+}
+.cta:hover{ filter:brightness(1.05); transform: translateY(-1px); }
+.cta:active{ transform: translateY(0); }
+
+.legal{ margin-top:12px; font-size:.86rem; color:var(--ink-soft); text-align:center; }
+
+/* móvil: simplificar humo/asa si molestan */
+@media (max-width:720px){
+  .cup-steam, .cup-handle{ display:none; }
+  .cup-body{ padding:28px; border-radius:24px; }
+}
+
+/* ===== Ajustes: centrar encabezados y reducir CTA ===== */
+
+/* ancho “limpio” del formulario dentro de la taza (ajusta a gusto) */
+:root{
+  --form-w: 360px;   /* 320–420px según prefieras */
+  --cta-w: 220px;    /* ancho del botón */
+}
+
+/* centra solo el título y subtítulo */
+.cup-login .auth-title,
+.cup-login .auth-sub{
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* asegura que el formulario y filas no se desborden y queden centrados */
+.cup-login form,
+.cup-login .form-row,
+.cup-login .form-row-inline,
+.cup-login .input-password{
+  max-width: var(--form-w);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* botón más pequeño y centrado */
+.cup-login .btn.btn-primary{
+  width: min(100%, var(--cta-w));
+  display: block;
+  margin: 12px auto 8px; /* arriba/centro/abajo */
+}
+/* === Agarradera (más grande) para la taza redonda === */
+.cup--round .cup-handle{
+  right: -90px;                 /* la mueves un poco hacia afuera */
+  top: 50%;
+  transform: translateY(-50%);  /* centrada verticalmente */
+  width: 190px;                  /* ↑ diámetro (antes ~130px) */
+  height: 190px;
+
+  /* grosor de la porcelana y contorno */
+  box-shadow:
+    inset 0 0 0 22px var(--cup-base, #FFF8EE),
+    inset 0 0 0 30px var(--cup-border, #EADFD3);
+
+  z-index: 1;                    /* detrás del cuerpo de la taza */
+  pointer-events: none;
+}
+
+/* agranda el hueco interior acorde al tamaño */
+.cup--round .cup-handle::after{
+  inset: 40px;                   /* más grande = más “aire” dentro */
+}
+
+/* asegúrate de que el cuerpo esté delante de la manija */
+.cup--round .cup-body{ z-index: 3 !important; }
