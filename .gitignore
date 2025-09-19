@@ -1,0 +1,50 @@
+# ---- Node/React ----
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-lock.yaml
+dist/
+build/
+.cache/
+.next/
+out/
+coverage/
+
+# Vite/Parcel
+.vite/
+.parcel-cache/
+
+# ---- Java / Spring Boot ----
+target/
+.gradle/
+build/
+!.mvn/wrapper/maven-wrapper.jar
+**/mvnw
+**/mvnw.cmd
+**/.mvn/
+
+# IDE
+.vscode/
+.idea/
+*.iml
+
+# SO
+.DS_Store
+Thumbs.db
+
+# Env / llaves
+.env
+*.env
+.env.*.local
+*.keystore
+
+# Archivos grandes/zip temporales
+*.zip
+*.tar
+*.7z
+*.rar
+
+# Logs
+*.log
+logs/
